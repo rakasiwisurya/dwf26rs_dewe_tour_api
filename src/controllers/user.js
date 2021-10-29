@@ -76,6 +76,9 @@ exports.updateUser = async (req, res) => {
       where: {
         id,
       },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
     });
     res.send({
       status: "success",
