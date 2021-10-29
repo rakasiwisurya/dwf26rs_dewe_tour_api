@@ -1,18 +1,19 @@
 const express = require("express");
 const {
-  addCountry,
-  getCountries,
-  getCountry,
-  updateCountry,
-  deleteCountry,
-} = require("../controllers/country");
-const {
   addUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
 } = require("../controllers/user");
+const {
+  addCountry,
+  getCountries,
+  getCountry,
+  updateCountry,
+  deleteCountry,
+} = require("../controllers/country");
+const { addTrip, getTrips, getTrip } = require("../controllers/trip");
 
 const router = express.Router();
 
@@ -29,5 +30,10 @@ router.get("/countries", getCountries);
 router.get("/countries/:id", getCountry);
 router.put("/countries/:id", updateCountry);
 router.delete("/countries/:id", deleteCountry);
+
+// router trip
+router.post("/trips", addTrip);
+router.get("/trips", getTrips);
+router.get("/trips/:id", getTrip);
 
 module.exports = router;
