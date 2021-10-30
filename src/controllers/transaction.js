@@ -3,7 +3,8 @@ const { transaction, user, trip } = require("../../models");
 exports.addTransaction = async (req, res) => {
   try {
     const data = req.body;
-    await transaction.create(data);
+    const { id } = req.user;
+    await transaction.create({ ...data, userId: id });
     res.send({
       status: "success",
       data,

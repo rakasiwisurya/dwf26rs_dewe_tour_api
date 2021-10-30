@@ -32,31 +32,31 @@ const {
 const { login, register } = require("../controllers/auth");
 
 // Middleware
-const { auth } = require("../middleware/auth");
+const { auth, adminOnly } = require("../middleware/auth");
 
 // Route
 router.get("/users", getUsers);
 router.get("/users/:id", getUser);
-router.put("/users/:id", auth, updateUser);
-router.delete("/users/:id", auth, deleteUser);
+router.put("/users/:id", auth, adminOnly, updateUser);
+router.delete("/users/:id", auth, adminOnly, deleteUser);
 
-router.post("/countries", auth, addCountry);
+router.post("/countries", auth, adminOnly, addCountry);
 router.get("/countries", getCountries);
 router.get("/countries/:id", getCountry);
-router.put("/countries/:id", auth, updateCountry);
-router.delete("/countries/:id", auth, deleteCountry);
+router.put("/countries/:id", auth, adminOnly, updateCountry);
+router.delete("/countries/:id", auth, adminOnly, deleteCountry);
 
-router.post("/trips", auth, addTrip);
+router.post("/trips", auth, adminOnly, addTrip);
 router.get("/trips", getTrips);
 router.get("/trips/:id", getTrip);
-router.put("/trips/:id", auth, updateTrip);
-router.delete("/trips/:id", auth, deleteTrip);
+router.put("/trips/:id", auth, adminOnly, updateTrip);
+router.delete("/trips/:id", auth, adminOnly, deleteTrip);
 
 router.post("/transactions", auth, addTransaction);
-router.get("/transactions", getTransactions);
-router.get("/transactions/:id", getTransaction);
-router.put("/transactions/:id", auth, updateTransaction);
-router.delete("/transactions/:id", auth, deleteTransaction);
+router.get("/transactions", auth, adminOnly, getTransactions);
+router.get("/transactions/:id", auth, adminOnly, getTransaction);
+router.put("/transactions/:id", auth, adminOnly, updateTransaction);
+router.delete("/transactions/:id", auth, adminOnly, deleteTransaction);
 
 router.post("/login", login);
 router.post("/register", register);

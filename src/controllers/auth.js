@@ -53,10 +53,10 @@ exports.register = async (req, res) => {
     });
 
     // generate token
-    const token = jwt.sign(
-      { id: newUser.id, role: newUser.role },
-      process.env.TOKEN_KEY
-    );
+    // const token = jwt.sign(
+    //   { id: newUser.id, role: newUser.role },
+    //   process.env.TOKEN_KEY
+    // );
 
     res.send({
       status: "success",
@@ -121,7 +121,7 @@ exports.login = async (req, res) => {
 
     // generate token
     const token = jwt.sign(
-      { id: newUser.id, role: newUser.role },
+      { id: userData.id, role: userData.role },
       process.env.TOKEN_KEY
     );
 
@@ -130,7 +130,6 @@ exports.login = async (req, res) => {
       data: {
         email: userData.email,
         fullname: userData.fullname,
-        role: userData.role,
         token,
       },
     });
