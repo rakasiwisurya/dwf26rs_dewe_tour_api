@@ -1,6 +1,8 @@
 const express = require("express");
+const router = express.Router();
+
+// Controller
 const {
-  addUser,
   getUsers,
   getUser,
   updateUser,
@@ -27,35 +29,36 @@ const {
   updateTransaction,
   deleteTransaction,
 } = require("../controllers/transaction");
+const { login, register } = require("../controllers/auth");
 
-const router = express.Router();
+// Middleware
+const { auth } = require("../middleware/auth");
 
-// router user
-router.post("/users", addUser);
+// Route
 router.get("/users", getUsers);
 router.get("/users/:id", getUser);
-router.put("/users/:id", updateUser);
-router.delete("/users/:id", deleteUser);
+router.put("/users/:id", auth, updateUser);
+router.delete("/users/:id", auth, deleteUser);
 
-// router country
-router.post("/countries", addCountry);
+router.post("/countries", auth, addCountry);
 router.get("/countries", getCountries);
 router.get("/countries/:id", getCountry);
-router.put("/countries/:id", updateCountry);
-router.delete("/countries/:id", deleteCountry);
+router.put("/countries/:id", auth, updateCountry);
+router.delete("/countries/:id", auth, deleteCountry);
 
-// router trip
-router.post("/trips", addTrip);
+router.post("/trips", auth, addTrip);
 router.get("/trips", getTrips);
 router.get("/trips/:id", getTrip);
-router.put("/trips/:id", updateTrip);
-router.delete("/trips/:id", deleteTrip);
+router.put("/trips/:id", auth, updateTrip);
+router.delete("/trips/:id", auth, deleteTrip);
 
-// router transaction
-router.post("/transactions", addTransaction);
+router.post("/transactions", auth, addTransaction);
 router.get("/transactions", getTransactions);
 router.get("/transactions/:id", getTransaction);
-router.put("/transactions/:id", updateTransaction);
-router.delete("/transactions/:id", deleteTransaction);
+router.put("/transactions/:id", auth, updateTransaction);
+router.delete("/transactions/:id", auth, deleteTransaction);
+
+router.post("/login", login);
+router.post("/register", register);
 
 module.exports = router;
