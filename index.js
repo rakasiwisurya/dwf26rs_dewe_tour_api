@@ -10,6 +10,9 @@ const port = 4000;
 
 app.use(express.json());
 
+// static folder uploads
+app.use("/uploads", express.static("uploads"));
+
 // Add endpoint grouping and router
 app.use("/api/v1/", router);
 

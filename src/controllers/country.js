@@ -1,11 +1,29 @@
 const { country } = require("../../models");
 
+const Joi = require("joi");
+
 exports.addCountry = async (req, res) => {
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+
+  const { error } = schema.validate(req.body);
+
+  // check if error return response 400
+  if (error) {
+    return res.status(400).send({
+      status: "failed",
+      error: {
+        message: error.details[0].message,
+      },
+    });
+  }
+
   try {
     await country.create(req.body);
     res.send({
       status: "success",
-      message: "Add country finished",
+      message: "Add country success",
     });
   } catch (error) {
     console.log(error);

@@ -10,9 +10,9 @@ exports.auth = (req, res, next) => {
 
   try {
     const verified = jwt.verify(token, process.env.TOKEN_KEY);
-    console.log(verified);
 
     req.user = verified;
+
     next();
   } catch (error) {
     res.status(400).send({ message: "invalid token" });
@@ -20,7 +20,6 @@ exports.auth = (req, res, next) => {
 };
 
 exports.adminOnly = (req, res, next) => {
-  console.log(req.user);
   if (req.user.role && req.user.role === "admin") {
     next();
     return;

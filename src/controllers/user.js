@@ -1,16 +1,35 @@
 const { user } = require("../../models");
 
+const pathFile = "http://localhost:4000/uploads/avatar/";
+
 exports.getUsers = async (req, res) => {
   try {
-    const data = await user.findAll({
+    let data = await user.findAll({
       attributes: {
-        exclude: ["createdAt", "updatedAt"],
+        exclude: ["createdAt", "updatedAt", "password"],
       },
+    });
+
+    data = JSON.parse(JSON.stringify(data));
+    const newData = data.map((item) => {
+      const avatar = item.avatar
+        ? pathFile + item.avatar
+        : pathFile + "no-photo.jpg";
+
+      return {
+        id: item.id,
+        email: item.email,
+        fullname: item.fullname,
+        phone: item.phone,
+        address: item.address,
+        gender: item.gender,
+        avatar: avatar,
+      };
     });
 
     res.send({
       status: "success",
-      data,
+      data: newData,
     });
   } catch (error) {
     console.log(error);
@@ -25,17 +44,28 @@ exports.getUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const data = await user.findOne({
+    let data = await user.findOne({
       where: {
         id,
       },
       attributes: {
-        exclude: ["createdAt", "updatedAt"],
+        exclude: ["createdAt", "updatedAt", "password"],
       },
     });
+
+    data = JSON.parse(JSON.stringify(data));
+    const avatar = data.avatar
+      ? pathFile + data.avatar
+      : pathFile + "no-photo.jpg";
+
+    const newData = {
+      ...data,
+      avatar: avatar,
+    };
+
     res.send({
       status: "success",
-      data,
+      data: newData,
     });
   } catch (error) {
     console.log(error);
@@ -64,6 +94,7 @@ exports.updateUser = async (req, res) => {
         exclude: ["createdAt", "updatedAt"],
       },
     });
+
     res.send({
       status: "success",
       data: {

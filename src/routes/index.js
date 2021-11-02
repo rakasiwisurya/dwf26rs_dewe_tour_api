@@ -33,6 +33,7 @@ const { login, register } = require("../controllers/auth");
 
 // Middleware
 const { auth, adminOnly } = require("../middleware/auth");
+const { uploadFiles } = require("../middleware/uploadFiles");
 
 // Route
 router.get("/users", getUsers);
@@ -46,19 +47,30 @@ router.get("/countries/:id", getCountry);
 router.put("/countries/:id", auth, adminOnly, updateCountry);
 router.delete("/countries/:id", auth, adminOnly, deleteCountry);
 
-router.post("/trips", auth, adminOnly, addTrip);
+router.post(
+  "/trips",
+  auth,
+  adminOnly,
+  uploadFiles("image", "uploads/trips"),
+  addTrip
+);
 router.get("/trips", getTrips);
 router.get("/trips/:id", getTrip);
 router.put("/trips/:id", auth, adminOnly, updateTrip);
 router.delete("/trips/:id", auth, adminOnly, deleteTrip);
 
-router.post("/transactions", auth, addTransaction);
+router.post(
+  "/transactions",
+  auth,
+  uploadFiles("attachment", "uploads/proofPayments"),
+  addTransaction
+);
 router.get("/transactions", auth, adminOnly, getTransactions);
 router.get("/transactions/:id", auth, adminOnly, getTransaction);
 router.put("/transactions/:id", auth, adminOnly, updateTransaction);
 router.delete("/transactions/:id", auth, adminOnly, deleteTransaction);
 
 router.post("/login", login);
-router.post("/register", register);
+router.post("/register", uploadFiles("avatar", "uploads/avatars"), register);
 
 module.exports = router;

@@ -45,18 +45,20 @@ exports.register = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const avatar = req.files ? req.files.avatar[0].filename : null;
 
     const newUser = await user.create({
       ...req.body,
       password: hashedPassword,
+      avatar: avatar,
       role: "user",
     });
 
     // generate token
-    // const token = jwt.sign(
-    //   { id: newUser.id, role: newUser.role },
-    //   process.env.TOKEN_KEY
-    // );
+    const token = jwt.sign(
+      { id: newUser.id, role: newUser.role },
+      process.env.TOKEN_KEY
+    );
 
     res.send({
       status: "success",
