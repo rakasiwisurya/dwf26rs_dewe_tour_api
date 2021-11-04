@@ -14,7 +14,6 @@ exports.register = async (req, res) => {
     phone: Joi.number().min(10).required(),
     address: Joi.string().min(10).required(),
     gender: Joi.string().min(4).required(),
-    avatar: Joi.string(),
   });
 
   const { error } = schema.validate(req.body);
@@ -39,18 +38,18 @@ exports.register = async (req, res) => {
     if (userData) {
       return res.status(400).send({
         status: "failed",
-        message: "email already exist",
+        message: "Email already exist",
       });
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    const avatar = req.files ? req.files.avatar[0].filename : null;
+    // const avatar = req.files ? req.files.avatar[0].filename : null;
 
     const newUser = await user.create({
       ...req.body,
       password: hashedPassword,
-      avatar: avatar,
+      avatar: null,
       role: "user",
     });
 
@@ -62,7 +61,7 @@ exports.register = async (req, res) => {
 
     res.send({
       status: "success",
-      message: "resource has succesfully created",
+      message: "Your account has succesfully created",
       data: {
         email: newUser.email,
         fullname: newUser.fullname,
@@ -108,7 +107,7 @@ exports.login = async (req, res) => {
     if (!userData) {
       return res.status(400).send({
         status: "failed",
-        message: "user not found",
+        message: "User not found",
       });
     }
 
@@ -117,7 +116,7 @@ exports.login = async (req, res) => {
     if (!isValid) {
       return res.status(400).send({
         status: "failed",
-        message: "password is incorrect",
+        message: "Password is incorrect",
       });
     }
 
@@ -129,6 +128,7 @@ exports.login = async (req, res) => {
 
     res.send({
       status: "success",
+      message: "Login succesful",
       data: {
         email: userData.email,
         fullname: userData.fullname,

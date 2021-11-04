@@ -71,6 +71,6 @@ router.put("/transactions/:id", auth, adminOnly, updateTransaction);
 router.delete("/transactions/:id", auth, adminOnly, deleteTransaction);
 
 router.post("/login", login);
-router.post("/register", uploadFiles("avatar", "uploads/avatars"), register);
+router.post("/register", register);
 
 module.exports = router;
