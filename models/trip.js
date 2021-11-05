@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       eat: DataTypes.STRING,
       day: DataTypes.INTEGER,
       night: DataTypes.INTEGER,
-      dateTrip: DataTypes.DATE,
+      dateTrip: DataTypes.DATEONLY,
       price: DataTypes.INTEGER,
       quota: DataTypes.INTEGER,
       description: DataTypes.TEXT,
