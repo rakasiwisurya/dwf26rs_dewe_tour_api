@@ -23,6 +23,7 @@ exports.addTrip = async (req, res) => {
 
   // check if error return response 400
   if (error) {
+    console.log(error);
     return res.status(400).send({
       status: "failed",
       error: {

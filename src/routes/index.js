@@ -29,7 +29,7 @@ const {
   updateTransaction,
   deleteTransaction,
 } = require("../controllers/transaction");
-const { login, register } = require("../controllers/auth");
+const { login, register, checkAuth } = require("../controllers/auth");
 
 // Middleware
 const { auth, adminOnly } = require("../middleware/auth");
@@ -72,5 +72,6 @@ router.delete("/transactions/:id", auth, adminOnly, deleteTransaction);
 
 router.post("/login", login);
 router.post("/register", register);
+router.get("/check-auth", auth, checkAuth);
 
 module.exports = router;
