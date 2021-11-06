@@ -1,7 +1,6 @@
 const { trip, country } = require("../../models");
 
 const fs = require("fs");
-const pathFile = "localhost:4000/uploads/trips/";
 const Joi = require("joi");
 
 exports.addTrip = async (req, res) => {
@@ -111,7 +110,7 @@ exports.getTrips = async (req, res) => {
       description: item.description,
       image: JSON.parse(item.image).map((image, index) => ({
         id: index + 1,
-        url: pathFile + image,
+        url: process.env.PATH_TRIP_IMAGES + image,
       })),
     }));
 
