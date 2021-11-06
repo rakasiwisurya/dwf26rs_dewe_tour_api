@@ -98,7 +98,7 @@ exports.getTrips = async (req, res) => {
     const newData = data.map((item) => ({
       id: item.id,
       title: item.title,
-      countries: item.country,
+      country: item.country,
       accomodation: item.accomodation,
       transportation: item.transportation,
       eat: item.eat,
