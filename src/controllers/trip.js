@@ -153,7 +153,7 @@ exports.getTrip = async (req, res) => {
       ...data,
       image: JSON.parse(data.image).map((image, index) => ({
         id: index + 1,
-        url: pathFile + image,
+        url: process.env.PATH_TRIP_IMAGES + image,
       })),
     };
 
