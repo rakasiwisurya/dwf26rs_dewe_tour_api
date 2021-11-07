@@ -197,7 +197,7 @@ exports.getTransaction = async (req, res) => {
   }
 };
 
-exports.updateStatusTransaction = async (req, res) => {
+exports.updatePay = async (req, res) => {
   const { id } = req.params;
 
   try {

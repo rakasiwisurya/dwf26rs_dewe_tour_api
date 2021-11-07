@@ -26,7 +26,7 @@ const {
   addTransaction,
   getTransactions,
   getTransaction,
-  updateStatusTransaction,
+  updatePay,
   updateConfirmTransaction,
   deleteTransaction,
 } = require("../controllers/transaction");
@@ -67,7 +67,7 @@ router.put(
   "/transactions/:id",
   auth,
   uploadFiles("attachment", "uploads/proofs"),
-  updateStatusTransaction
+  updatePay
 );
 router.put("/transactions/:id", auth, adminOnly, updateConfirmTransaction);
 router.delete("/transactions/:id", auth, adminOnly, deleteTransaction);
