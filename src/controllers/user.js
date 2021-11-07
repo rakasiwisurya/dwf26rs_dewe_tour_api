@@ -1,6 +1,6 @@
 const { user } = require("../../models");
 
-const pathFile = "http://localhost:4000/uploads/avatar/";
+const fs = require("fs");
 
 exports.getUsers = async (req, res) => {
   try {
@@ -13,8 +13,8 @@ exports.getUsers = async (req, res) => {
     data = JSON.parse(JSON.stringify(data));
     const newData = data.map((item) => {
       const avatar = item.avatar
-        ? pathFile + item.avatar
-        : pathFile + "no-photo.jpg";
+        ? process.env.PATH_AVATAR_IMAGES + item.avatar
+        : process.env.PATH_AVATAR_IMAGES + "no-photo.jpg";
 
       return {
         id: item.id,
@@ -55,8 +55,8 @@ exports.getUser = async (req, res) => {
 
     data = JSON.parse(JSON.stringify(data));
     const avatar = data.avatar
-      ? pathFile + data.avatar
-      : pathFile + "no-photo.jpg";
+      ? process.env.PATH_AVATAR_IMAGES + data.avatar
+      : process.env.PATH_AVATAR_IMAGES + "no-photo.jpg";
 
     const newData = {
       ...data,
@@ -79,14 +79,12 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
 
-  try {
-    await user.update(req.body, {
-      where: {
-        id,
-      },
-    });
+  const data = {
+    avatar: req.files.avatar[0].filename,
+  };
 
-    const updatedData = await user.findOne({
+  try {
+    const userData = await user.findOne({
       where: {
         id,
       },
@@ -95,10 +93,37 @@ exports.updateUser = async (req, res) => {
       },
     });
 
+    if (userData.avatar !== null) {
+      fs.unlink("uploads/avatars/" + userData.avatar, (err) => {
+        if (err) throw err;
+      });
+    }
+
+    await user.update(data, {
+      where: {
+        id,
+      },
+    });
+
+    let updatedData = await user.findOne({
+      where: {
+        id,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    updatedData = JSON.parse(JSON.stringify(updatedData));
+    const newUpdatedData = {
+      ...updatedData,
+      avatar: process.env.PATH_AVATAR_IMAGES + updatedData.avatar,
+    };
+
     res.send({
       status: "success",
       data: {
-        user: updatedData,
+        user: newUpdatedData,
       },
     });
   } catch (error) {

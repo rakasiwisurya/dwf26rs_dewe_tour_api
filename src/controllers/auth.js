@@ -98,9 +98,12 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const userData = await user.findOne({
+    let userData = await user.findOne({
       where: {
         email: req.body.email,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "password"],
       },
     });
 
@@ -126,18 +129,28 @@ exports.login = async (req, res) => {
       process.env.TOKEN_KEY
     );
 
+    userData = JSON.parse(JSON.stringify(userData));
+
+    const avatar = userData.avatar
+      ? process.env.PATH_AVATAR_IMAGES + userData.avatar
+      : process.env.PATH_AVATAR_IMAGES + "no-photo.jpg";
+
+    const newDataUser = {
+      id: userData.id,
+      fullname: userData.fullname,
+      email: userData.email,
+      gender: userData.gender,
+      phone: userData.phone,
+      address: userData.address,
+      role: userData.role,
+      avatar: avatar,
+      token,
+    };
+
     res.send({
       status: "success",
       message: "Login succesful",
-      data: {
-        fullname: userData.fullname,
-        email: userData.email,
-        gender: userData.gender,
-        phone: userData.phone,
-        address: userData.address,
-        role: userData.role,
-        token,
-      },
+      data: newDataUser,
     });
   } catch (error) {
     console.log(error);
@@ -152,7 +165,7 @@ exports.checkAuth = async (req, res) => {
   try {
     const id = req.user.id;
 
-    const dataUser = await user.findOne({
+    let userData = await user.findOne({
       where: {
         id,
       },
@@ -161,24 +174,33 @@ exports.checkAuth = async (req, res) => {
       },
     });
 
-    if (!dataUser) {
+    if (!userData) {
       return res.status(404).send({
         status: "failed",
       });
     }
 
+    userData = JSON.parse(JSON.stringify(userData));
+
+    const avatar = userData.avatar
+      ? process.env.PATH_AVATAR_IMAGES + userData.avatar
+      : process.env.PATH_AVATAR_IMAGES + "no-photo.jpg";
+
+    const newUserData = {
+      id: userData.id,
+      fullname: userData.fullname,
+      email: userData.email,
+      gender: userData.gender,
+      phone: userData.phone,
+      address: userData.address,
+      role: userData.role,
+      avatar: avatar,
+    };
+
     res.send({
       status: "success",
       data: {
-        user: {
-          id: dataUser.id,
-          fullname: dataUser.fullname,
-          email: dataUser.email,
-          gender: dataUser.gender,
-          phone: dataUser.phone,
-          address: dataUser.adress,
-          role: dataUser.role,
-        },
+        user: newUserData,
       },
     });
   } catch (error) {

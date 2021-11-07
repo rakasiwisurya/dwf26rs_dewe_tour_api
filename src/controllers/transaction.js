@@ -26,7 +26,7 @@ exports.addTransaction = async (req, res) => {
   try {
     const data = req.body;
     const { id } = req.user;
-    console.log(req.user);
+    // console.log(req.user);
     // const attachment = req.files ? req.files.attachment[0].filename : null;
 
     const newTransaction = await transaction.create({
@@ -64,7 +64,7 @@ exports.addTransaction = async (req, res) => {
     // transactionData = JSON.parse(JSON.stringify(transactionData));
 
     // const confirmAttachment = transactionData.attachment
-    //   ? process.env.PATH_TRIP_PROOF + transactionData.attachment
+    //   ? process.env.PATH_PROOF_IMAGES + transactionData.attachment
     //   : null;
 
     // const newTransactionData = {
@@ -128,7 +128,7 @@ exports.getTransactions = async (req, res) => {
 
     const newData = data.map((item) => {
       let attachment = item.attachment
-        ? process.env.PATH_TRIP_PROOF + item.attachment
+        ? process.env.PATH_PROOF_IMAGES + item.attachment
         : null;
 
       return {

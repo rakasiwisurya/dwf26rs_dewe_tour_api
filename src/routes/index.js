@@ -39,7 +39,12 @@ const { uploadFiles } = require("../middleware/uploadFiles");
 // Route
 router.get("/users", getUsers);
 router.get("/users/:id", getUser);
-router.put("/users/:id", auth, adminOnly, updateUser);
+router.put(
+  "/users/:id",
+  auth,
+  uploadFiles("avatar", "uploads/avatars"),
+  updateUser
+);
 router.delete("/users/:id", auth, adminOnly, deleteUser);
 
 router.post("/countries", auth, adminOnly, addCountry);
