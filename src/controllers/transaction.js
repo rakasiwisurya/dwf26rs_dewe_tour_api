@@ -1,8 +1,6 @@
-const { transaction, user, trip } = require("../../models");
+const { transaction, user, trip, country } = require("../../models");
 
 const Joi = require("joi");
-
-const pathFile = "http://localhost:4000/uploads/proofPayments/";
 
 exports.addTransaction = async (req, res) => {
   const schema = Joi.object({
@@ -16,6 +14,7 @@ exports.addTransaction = async (req, res) => {
 
   // check if error return response 400
   if (error) {
+    console.log(error);
     return res.status(400).send({
       status: "failed",
       error: {
@@ -27,16 +26,17 @@ exports.addTransaction = async (req, res) => {
   try {
     const data = req.body;
     const { id } = req.user;
-    const attachment = req.files ? req.files.attachment[0].filename : null;
+    console.log(req.user);
+    // const attachment = req.files ? req.files.attachment[0].filename : null;
 
     const newTransaction = await transaction.create({
       ...data,
       userId: id,
       status: "Waiting Payment",
-      attachment: attachment,
+      attachment: null,
     });
 
-    let transactionData = await transaction.findOne({
+    const transactionData = await transaction.findOne({
       where: {
         id: newTransaction.id,
       },
@@ -61,19 +61,21 @@ exports.addTransaction = async (req, res) => {
       },
     });
 
-    transactionData = JSON.parse(JSON.stringify(transactionData));
+    // transactionData = JSON.parse(JSON.stringify(transactionData));
 
-    const confirmAttachment = transactionData.attachment
-      ? pathFile + transactionData.attachment
-      : null;
-    const newTransactionData = {
-      ...transactionData,
-      attachment: confirmAttachment,
-    };
+    // const confirmAttachment = transactionData.attachment
+    //   ? process.env.PATH_TRIP_PROOF + transactionData.attachment
+    //   : null;
+
+    // const newTransactionData = {
+    //   ...transactionData,
+    //   attachment: confirmAttachment,
+    // };
 
     res.send({
       status: "success",
-      data: newTransactionData,
+      message: "Book succesfull added to your transaction",
+      data: transactionData,
     });
   } catch (error) {
     console.log(error);
@@ -92,32 +94,50 @@ exports.getTransactions = async (req, res) => {
           model: user,
           as: "user",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "password", "role"],
+            exclude: ["createdAt", "updatedAt", "password", "role", "avatar"],
           },
         },
         {
           model: trip,
           as: "trip",
+          include: {
+            model: country,
+            as: "country",
+            attributes: {
+              exclude: ["createdAt", "updatedAt"],
+            },
+          },
           attributes: {
-            exclude: ["createdAt", "updatedAt"],
+            exclude: [
+              "createdAt",
+              "updatedAt",
+              "countryId",
+              "description",
+              "quota",
+              "image",
+            ],
           },
         },
       ],
       attributes: {
-        exclude: ["createdAt", "updatedAt", "userId", "tripId"],
+        exclude: ["updatedAt", "userId", "tripId"],
       },
     });
 
     data = JSON.parse(JSON.stringify(data));
 
     const newData = data.map((item) => {
-      let attachment = item.attachment ? pathFile + item.attachment : null;
+      let attachment = item.attachment
+        ? process.env.PATH_TRIP_PROOF + item.attachment
+        : null;
 
       return {
         id: item.id,
         counterQty: item.counterQty,
+        total: item.total,
         status: item.status,
         attachment: attachment,
+        createdAt: item.createdAt,
         trip: item.trip,
         user: item.user,
       };
@@ -177,7 +197,25 @@ exports.getTransaction = async (req, res) => {
   }
 };
 
-exports.updateTransaction = async (req, res) => {
+exports.updateStatusTransaction = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await transaction.update(req.body, {
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "Server error",
+    });
+  }
+};
+
+exports.updateConfirmTransaction = async (req, res) => {
   const { id } = req.params;
 
   try {

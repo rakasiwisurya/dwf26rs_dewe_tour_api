@@ -89,7 +89,18 @@ exports.getTrips = async (req, res) => {
         },
       },
       attributes: {
-        exclude: ["createdAt", "updatedAt", "countryId"],
+        exclude: [
+          "createdAt",
+          "updatedAt",
+          "countryId",
+          "accomodation",
+          "transportation",
+          "eat",
+          "day",
+          "night",
+          "dateTrip",
+          "description",
+        ],
       },
     });
 
@@ -99,15 +110,8 @@ exports.getTrips = async (req, res) => {
       id: item.id,
       title: item.title,
       country: item.country,
-      accomodation: item.accomodation,
-      transportation: item.transportation,
-      eat: item.eat,
-      day: item.day,
-      night: item.night,
-      dateTrip: item.dateTrip,
       price: item.price,
       quota: item.quota,
-      description: item.description,
       image: JSON.parse(item.image).map((image, index) => ({
         id: index + 1,
         url: process.env.PATH_TRIP_IMAGES + image,

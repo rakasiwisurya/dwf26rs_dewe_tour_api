@@ -26,7 +26,8 @@ const {
   addTransaction,
   getTransactions,
   getTransaction,
-  updateTransaction,
+  updateStatusTransaction,
+  updateConfirmTransaction,
   deleteTransaction,
 } = require("../controllers/transaction");
 const { login, register, checkAuth } = require("../controllers/auth");
@@ -59,15 +60,16 @@ router.get("/trips/:id", getTrip);
 router.put("/trips/:id", auth, adminOnly, updateTrip);
 router.delete("/trips/:id", auth, adminOnly, deleteTrip);
 
-router.post(
-  "/transactions",
-  auth,
-  uploadFiles("attachment", "uploads/proofPayments"),
-  addTransaction
-);
-router.get("/transactions", auth, adminOnly, getTransactions);
+router.post("/transactions", auth, addTransaction);
+router.get("/transactions", auth, getTransactions);
 router.get("/transactions/:id", auth, adminOnly, getTransaction);
-router.put("/transactions/:id", auth, adminOnly, updateTransaction);
+router.put(
+  "/transactions/:id",
+  auth,
+  uploadFiles("attachment", "uploads/proofs"),
+  updateStatusTransaction
+);
+router.put("/transactions/:id", auth, adminOnly, updateConfirmTransaction);
 router.delete("/transactions/:id", auth, adminOnly, deleteTransaction);
 
 router.post("/login", login);
