@@ -97,13 +97,15 @@ exports.login = async (req, res) => {
     });
   }
 
+  // console.log(req.body);
+
   try {
     let userData = await user.findOne({
       where: {
         email: req.body.email,
       },
       attributes: {
-        exclude: ["createdAt", "updatedAt", "password"],
+        exclude: ["createdAt", "updatedAt"],
       },
     });
 
@@ -205,9 +207,9 @@ exports.checkAuth = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status({
+    res.status(500).send({
       status: "failed",
-      message: "Server Error",
+      message: "server error",
     });
   }
 };
