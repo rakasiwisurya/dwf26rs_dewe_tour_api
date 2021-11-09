@@ -181,7 +181,7 @@ exports.getTransaction = async (req, res) => {
         },
       ],
       attributes: {
-        exclude: ["createdAt", "updatedAt", "userId", "tripId"],
+        exclude: ["updatedAt", "userId", "tripId"],
       },
     });
     res.send({
@@ -200,11 +200,60 @@ exports.getTransaction = async (req, res) => {
 exports.updatePay = async (req, res) => {
   const { id } = req.params;
 
+  const data = {
+    status: "Waiting Approve",
+    attachment: req.files.attachment[0].filename,
+  };
+
   try {
-    await transaction.update(req.body, {
+    await transaction.update(data, {
       where: {
         id,
       },
+    });
+
+    const updatedData = await transaction.findOne({
+      where: {
+        id,
+      },
+      include: [
+        {
+          model: user,
+          as: "user",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "password", "role", "avatar"],
+          },
+        },
+        {
+          model: trip,
+          as: "trip",
+          include: {
+            model: country,
+            as: "country",
+            attributes: {
+              exclude: ["createdAt", "updatedAt"],
+            },
+          },
+          attributes: {
+            exclude: [
+              "createdAt",
+              "updatedAt",
+              "countryId",
+              "description",
+              "quota",
+              "image",
+            ],
+          },
+        },
+      ],
+      attributes: {
+        exclude: ["updatedAt", "userId", "tripId"],
+      },
+    });
+
+    res.send({
+      status: "success",
+      data: updatedData,
     });
   } catch (error) {
     console.log(error);

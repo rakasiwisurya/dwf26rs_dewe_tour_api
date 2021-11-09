@@ -69,12 +69,17 @@ router.post("/transactions", auth, addTransaction);
 router.get("/transactions", auth, getTransactions);
 router.get("/transactions/:id", auth, adminOnly, getTransaction);
 router.put(
-  "/transactions/:id",
+  "/transactions/pay/:id",
   auth,
   uploadFiles("attachment", "uploads/proofs"),
   updatePay
 );
-router.put("/transactions/:id", auth, adminOnly, updateConfirmTransaction);
+router.put(
+  "/transactions/confirm/:id",
+  auth,
+  adminOnly,
+  updateConfirmTransaction
+);
 router.delete("/transactions/:id", auth, adminOnly, deleteTransaction);
 
 router.post("/login", login);
