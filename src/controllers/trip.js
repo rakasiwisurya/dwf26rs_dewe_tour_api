@@ -185,7 +185,7 @@ exports.updateTrip = async (req, res) => {
       },
     });
 
-    let updatedData = await trip.findOne({
+    const updatedData = await trip.findOne({
       where: {
         id,
       },
@@ -201,19 +201,9 @@ exports.updateTrip = async (req, res) => {
       },
     });
 
-    updatedData = JSON.parse(JSON.stringify(updatedData));
-
-    const newUpdatedData = {
-      ...updatedData,
-      image: JSON.parse(data.image).map((image, index) => ({
-        id: index + 1,
-        url: PATH_TRIP_IMAGES + image,
-      })),
-    };
-
     res.send({
       status: "success",
-      data: newUpdatedData,
+      updatedData,
     });
   } catch (error) {
     console.log(error);

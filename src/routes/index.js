@@ -62,7 +62,7 @@ router.post(
 );
 router.get("/trips", getTrips);
 router.get("/trips/:id", getTrip);
-router.put("/trips/:id", auth, adminOnly, updateTrip);
+router.put("/trips/:id", auth, updateTrip);
 router.delete("/trips/:id", auth, adminOnly, deleteTrip);
 
 router.post("/transactions", auth, addTransaction);
