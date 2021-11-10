@@ -283,26 +283,39 @@ exports.updateConfirmTransaction = async (req, res) => {
           model: user,
           as: "user",
           attributes: {
-            exclude: ["createdAt", "updatedAt", "password", "role"],
+            exclude: ["createdAt", "updatedAt", "password", "role", "avatar"],
           },
         },
         {
           model: trip,
           as: "trip",
+          include: {
+            model: country,
+            as: "country",
+            attributes: {
+              exclude: ["createdAt", "updatedAt"],
+            },
+          },
           attributes: {
-            exclude: ["createdAt", "updatedAt"],
+            exclude: [
+              "createdAt",
+              "updatedAt",
+              "countryId",
+              "description",
+              "quota",
+              "image",
+            ],
           },
         },
       ],
       attributes: {
-        exclude: ["createdAt", "updatedAt", "userId", "tripId"],
+        exclude: ["updatedAt", "userId", "tripId"],
       },
     });
+
     res.send({
       status: "success",
-      data: {
-        trip: updatedData,
-      },
+      data: updatedData,
     });
   } catch (error) {
     console.log(error);

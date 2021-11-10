@@ -61,12 +61,13 @@ exports.addTrip = async (req, res) => {
       ...tripData,
       image: JSON.parse(tripData.image).map((image, index) => ({
         id: index + 1,
-        url: pathFile + image,
+        url: process.env.PATH_TRIP_IMAGES + image,
       })),
     };
 
     res.send({
       status: "success",
+      message: "Trip successfully added",
       data: newData,
     });
   } catch (error) {
@@ -206,7 +207,7 @@ exports.updateTrip = async (req, res) => {
       ...updatedData,
       image: JSON.parse(data.image).map((image, index) => ({
         id: index + 1,
-        url: pathFile + image,
+        url: PATH_TRIP_IMAGES + image,
       })),
     };
 
