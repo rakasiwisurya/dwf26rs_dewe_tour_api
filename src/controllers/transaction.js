@@ -111,7 +111,6 @@ exports.getTransactions = async (req, res) => {
               "updatedAt",
               "countryId",
               "description",
-              "quota",
               "image",
             ],
           },
