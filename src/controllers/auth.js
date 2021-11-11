@@ -97,8 +97,6 @@ exports.login = async (req, res) => {
     });
   }
 
-  // console.log(req.body);
-
   try {
     let userData = await user.findOne({
       where: {

@@ -26,8 +26,6 @@ exports.addTransaction = async (req, res) => {
   try {
     const data = req.body;
     const { id } = req.user;
-    // console.log(req.user);
-    // const attachment = req.files ? req.files.attachment[0].filename : null;
 
     const newTransaction = await transaction.create({
       ...data,
