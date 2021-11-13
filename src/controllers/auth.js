@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
   // check if error return response 400
   if (error) {
     return res.status(400).send({
-      status: "failed",
+      status: "Failed",
       error: {
         message: error.details[0].message,
       },
@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
 
     if (userData) {
       return res.status(400).send({
-        status: "failed",
+        status: "Failed",
         message: "Email already exist",
       });
     }
@@ -60,7 +60,7 @@ exports.register = async (req, res) => {
     );
 
     res.send({
-      status: "success",
+      status: "Success",
       message: "Your account has succesfully created",
       data: {
         email: newUser.email,
@@ -90,7 +90,7 @@ exports.login = async (req, res) => {
   // check if error return response 400
   if (error) {
     return res.status(400).send({
-      status: "failed",
+      status: "Failed",
       error: {
         message: error.details[0].message,
       },
