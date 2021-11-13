@@ -15,6 +15,7 @@ exports.addTrip = async (req, res) => {
     dateTrip: Joi.date().required(),
     price: Joi.number().required(),
     quota: Joi.number().required(),
+    maxQuota: Joi.number().required(),
     description: Joi.string().min(10).max(1000).required(),
   });
 
@@ -113,6 +114,7 @@ exports.getTrips = async (req, res) => {
       country: item.country,
       price: item.price,
       quota: item.quota,
+      maxQuota: item.maxQuota,
       image: JSON.parse(item.image).map((image, index) => ({
         id: index + 1,
         url: process.env.PATH_TRIP_IMAGES + image,

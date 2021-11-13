@@ -44,13 +44,17 @@ module.exports = {
       },
       dateTrip: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       price: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
       quota: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      maxQuota: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
