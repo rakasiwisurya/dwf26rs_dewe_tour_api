@@ -109,7 +109,7 @@ exports.login = async (req, res) => {
 
     if (!userData) {
       return res.status(400).send({
-        status: "failed",
+        status: "Failed",
         message: "User not found",
       });
     }
@@ -118,7 +118,7 @@ exports.login = async (req, res) => {
 
     if (!isValid) {
       return res.status(400).send({
-        status: "failed",
+        status: "Failed",
         message: "Password is incorrect",
       });
     }
