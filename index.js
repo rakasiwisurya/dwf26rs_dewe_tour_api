@@ -17,6 +17,8 @@ const io = new Server(server, {
   },
 });
 
+require("./src/socket")(io);
+
 const port = 4000;
 
 app.use(express.json());
